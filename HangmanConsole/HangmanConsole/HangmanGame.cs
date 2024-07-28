@@ -10,7 +10,8 @@ namespace HangmanConsole
     internal class HangmanGame
     {
         Random rng = new Random();
-        List<string> words = new List<string>() { 
+        List<string> words = new List<string>() 
+        { 
             "Alohomora", 
             "Sectumsempra",
             "Expelliarmus",
@@ -20,36 +21,36 @@ namespace HangmanConsole
             "Wingardium Leviosa",
             "Riddikulus",
             "Imperius Curse",
-            "Locomotor Wibbly" };
-        int mistakes = 0;
-        public Dictionary<int, string> gallows = new Dictionary<int, string>();
-
-        public void AddGallowsDrawingsToDict()
+            "Locomotor Wibbly" 
+        };
+        public List<char> letters = new List<char>();
+        public int mistakes = 0;
+        public Dictionary<int, string> gallows = new Dictionary<int, string>()
         {
-            gallows.Add(1, "/");
-            gallows.Add(2, "/ \\");
-            gallows.Add(3, " | \n/ \\");
-            gallows.Add(4, " | \n | \n/ \\");
-            gallows.Add(5, " | \n | \n | \n/ \\");
-            gallows.Add(6, " _\n | \n | \n | \n/ \\");
-            gallows.Add(7, " __\n | \n | \n | \n/ \\");
-            gallows.Add(8, " ___\n | \n | \n | \n/ \\");
-            gallows.Add(9, " ___\n | O\n | \n | \n/ \\");
-            gallows.Add(10, " ___\n | O\n |/\n | \n/ \\");
-            gallows.Add(11, " ___\n | O\n |/\\\n | \n/ \\");
-            gallows.Add(12, " ___\n | O\n |/|\\\n | \n/ \\");
-            gallows.Add(13, " ___\n | O\n |/|\\\n |/ \n/ \\");
-            gallows.Add(14, " ___\n | O\n |/|\\\n |/ \\ \n/ \\");
-        }
+            { 0, " " },
+            { 1, "/" },
+            { 2, "/ \\" },
+            { 3, " | \n/ \\" },
+            { 4, " | \n | \n/ \\" },
+            { 5, " | \n | \n | \n/ \\" },
+            { 6, " _\n | \n | \n | \n/ \\" },
+            { 7, " __\n | \n | \n | \n/ \\" },
+            { 8, " ___\n | \n | \n | \n/ \\" },
+            { 9, " ___\n | O\n | \n | \n/ \\" },
+            { 10, " ___\n | O\n |/\n | \n/ \\" },
+            { 11, " ___\n | O\n |/\\\n | \n/ \\" },
+            { 12, " ___\n | O\n |/|\\\n | \n/ \\" },
+            { 13, " ___\n | O\n |/|\\\n |/ \n/ \\" },
+            { 14, " ___\n | O\n |/|\\\n |/ \\ \n/ \\" }
+        };
 
         public string WordDraw()
         {
             return words[rng.Next(0, 10)];
         }
 
-        public string GuessedWord(List<char> letters, string word, char letter)
+        public string HiddenGuessedWord(string word)
         {
-            letters.Add(letter);
             string guessedWord = "";
             foreach (char c in word)
             {
@@ -58,6 +59,19 @@ namespace HangmanConsole
                 else { guessedWord += "_"; }
             }
             return guessedWord;
+        }
+
+        public void CheckInputLetter(char letter, string guessedWord)
+        {
+            if (letters.Contains(letter)) { Console.WriteLine("Your letter is already on the list !"); mistakes++; }
+            else if (!letters.Contains(letter) & !guessedWord.Contains(letter)) { letters.Add(letter); Console.WriteLine("Your letter isn`t in guessed word !"); mistakes++; }
+            else { letters.Add(letter); Console.WriteLine("Correct ! Your letter is in guessed word !"); }
+        }
+        
+        public bool CheckWordIsGuessed(string guessedWord)
+        {
+            if (guessedWord.Contains("_")) { return false; }
+            return true;
         }
     }
 }
