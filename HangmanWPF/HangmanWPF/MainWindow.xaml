@@ -12,13 +12,13 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="11*"/>
+            <ColumnDefinition Width="9*"/>
+            <ColumnDefinition Width="20*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="gallowsTextBlock" Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="400" Grid.RowSpan="2" Height="440"/>
-        <TextBox x:Name="inputTextBox" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" Text="Type a letter: " VerticalAlignment="Center" Width="400" Height="60" FontSize="36"/>
-        <TextBlock x:Name="guessedWordTextBlock" Margin="55,34,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="-160,199,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-
+        <TextBlock x:Name="gallowsTextBlock" Grid.Column="2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="400" Grid.RowSpan="2" Height="440" FontSize="24" Margin="0,-3,0,0"/>
+        <TextBlock x:Name="typeLetterTextBlock" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" Text="Type a letter: " VerticalAlignment="Center" Width="400" Height="60" FontSize="36" Grid.ColumnSpan="2"/>
+        <TextBlock x:Name="guessedWordTextBlock" TextWrapping="Wrap" FontSize="36" Text="" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="inputLetterTextBox" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" Text="" Width="160" Height="60" FontSize="36"/>
     </Grid>
 </Window>
