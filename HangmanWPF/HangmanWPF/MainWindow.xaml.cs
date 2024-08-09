@@ -48,18 +48,15 @@ namespace HangmanWPF
             { 13, " ___\n | O\n |/|\\\n |/ \n/ \\" },
             { 14, " ___\n | O\n |/|\\\n |/ \\ \n/ \\" }
         };
+        static string word = words[rng.Next(0, 10)].ToLower();
 
         public MainWindow()
         {
             InitializeComponent();
+            guessedWordTextBlock.Text = HiddenGuessedWord(word);
         }
 
-        static string WordDraw()
-        {
-            return words[rng.Next(0, 10)];
-        }
-
-        static string HiddenGuessedWord(string word)
+        private static string HiddenGuessedWord(string word)
         {
             string guessedWord = "";
             foreach (char c in word)
@@ -71,33 +68,36 @@ namespace HangmanWPF
             return guessedWord;
         }
 
-        static string word = WordDraw();
-        string hiddenWord = HiddenGuessedWord(word);
-
         private void inputLetterTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            string letterString;
             if (e.Key == Key.Enter)
-            {
-                letterString = e.Key.ToString();
-                char letter = letterString[0];         
-                CheckInputLetter(letter, hiddenWord);
-                gallowsTextBlock.Text = gallows[mistakes];
-                inputLetterTextBox.Clear();
+            { 
+                string inputText = inputLetterTextBox.Text;
+                if (!string.IsNullOrEmpty(inputText) && inputText.Length == 1)
+                {
+                    char letter = inputText[0];
+                    CheckInputLetter(letter, word);
+                    string hiddenWord = HiddenGuessedWord(word);
+                    guessedWordTextBlock.Text = hiddenWord;
+                    gallowsTextBlock.Text = gallows[mistakes];
+                    inputLetterTextBox.Clear();
+                    bool gameStatus = CheckGameStatus(hiddenWord);
+                    if (gameStatus) { guessedWordTextBlock.Text = word; };
+                }
             }
         }
 
-        public void CheckInputLetter(char letter, string guessedWord)
+        private void CheckInputLetter(char letter, string guessedWord)
         {
             if (letters.Contains(letter)) { mistakes++; }
-            else if (!letters.Contains(letter) & !guessedWord.Contains(letter)) { letters.Add(letter); mistakes++; }
+            else if (!letters.Contains(letter) && !guessedWord.Contains(letter)) { letters.Add(letter); mistakes++; }
             else { letters.Add(letter); }
         }
 
-        public bool CheckWordIsGuessed(string guessedWord)
+        private bool CheckGameStatus(string guessedWord)
         {
-            if (guessedWord.Contains("_")) { return false; }
-            return true;
+            if (!guessedWord.Contains("_") || mistakes >= 14) { return true; }
+            return false;
         }
     }
 }
