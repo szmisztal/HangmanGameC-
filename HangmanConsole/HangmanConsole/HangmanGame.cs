@@ -64,7 +64,7 @@ namespace HangmanConsole
         public void CheckInputLetter(char letter, string guessedWord)
         {
             if (letters.Contains(letter)) { Console.WriteLine("Your letter is already on the list !"); mistakes++; }
-            else if (!letters.Contains(letter) & !guessedWord.Contains(letter)) { letters.Add(letter); Console.WriteLine("Your letter isn`t in guessed word !"); mistakes++; }
+            else if (!letters.Contains(letter) && !guessedWord.Contains(letter)) { letters.Add(letter); Console.WriteLine("Your letter isn`t in guessed word !"); mistakes++; }
             else { letters.Add(letter); Console.WriteLine("Correct ! Your letter is in guessed word !"); }
         }
         
