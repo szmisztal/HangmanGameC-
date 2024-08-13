@@ -79,10 +79,10 @@ namespace HangmanWPF
                     CheckInputLetter(letter, word);
                     string hiddenWord = HiddenGuessedWord(word);
                     guessedWordTextBlock.Text = hiddenWord;
+                    bool gameStatus = CheckGameStatus(hiddenWord);
+                    if (gameStatus) { EndGame(hiddenWord); };
                     gallowsTextBlock.Text = gallows[mistakes];
                     inputLetterTextBox.Clear();
-                    bool gameStatus = CheckGameStatus(hiddenWord);
-                    if (gameStatus) { guessedWordTextBlock.Text = word; };
                 }
             }
         }
@@ -98,6 +98,14 @@ namespace HangmanWPF
         {
             if (!guessedWord.Contains("_") || mistakes >= 14) { return true; }
             return false;
+        }
+
+        private void EndGame(string guessedWord)
+        {
+            inputLetterTextBox.IsEnabled = false;
+            inputLetterTextBox.Visibility = Visibility.Hidden;
+            if (mistakes >= 14 ) { typeLetterTextBlock.FontSize = 24; typeLetterTextBlock.Text = "You loose, guessed word was: " + word; }
+            else { typeLetterTextBlock.Text = "You win! "; }
         }
     }
 }
