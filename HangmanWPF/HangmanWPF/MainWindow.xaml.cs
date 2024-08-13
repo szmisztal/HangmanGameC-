@@ -104,7 +104,7 @@ namespace HangmanWPF
         {
             inputLetterTextBox.IsEnabled = false;
             inputLetterTextBox.Visibility = Visibility.Hidden;
-            if (mistakes >= 14 ) { typeLetterTextBlock.FontSize = 24; typeLetterTextBlock.Text = "You loose, guessed word was: " + word; }
+            if (mistakes >= 14 ) { typeLetterTextBlock.FontSize = 24; typeLetterTextBlock.Text = "You loose, guessed word was: " + "'" + word.ToUpper() + "'"; }
             else { typeLetterTextBlock.Text = "You win! "; }
         }
     }
