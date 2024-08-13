@@ -14,8 +14,8 @@ namespace HangmanWPF
 {
     public partial class MainWindow : Window
     {
-        static Random rng = new Random();
-        static List<string> words = new List<string>()
+        Random rng = new Random();
+        List<string> words = new List<string>()
         {
             "Alohomora",
             "Sectumsempra",
@@ -28,8 +28,7 @@ namespace HangmanWPF
             "Imperius Curse",
             "Locomotor Wibbly"
         };
-        static List<char> letters = new List<char>();
-        int mistakes = 0;
+        List<char> letters = new List<char>();
         Dictionary<int, string> gallows = new Dictionary<int, string>()
         {
             { 0, " " },
@@ -48,15 +47,16 @@ namespace HangmanWPF
             { 13, " ___\n | O\n |/|\\\n |/ \n/ \\" },
             { 14, " ___\n | O\n |/|\\\n |/ \\ \n/ \\" }
         };
-        static string word = words[rng.Next(0, 10)].ToLower();
+        string word;
+        int mistakes;
 
         public MainWindow()
         {
             InitializeComponent();
-            guessedWordTextBlock.Text = HiddenGuessedWord(word);
+            SetUpGame();
         }
 
-        private static string HiddenGuessedWord(string word)
+        private string HiddenGuessedWord(string word)
         {
             string guessedWord = "";
             foreach (char c in word)
@@ -65,6 +65,7 @@ namespace HangmanWPF
                 else if (c == ' ') { guessedWord += " "; }
                 else { guessedWord += "_"; }
             }
+            guessedWordTextBlock.Text = guessedWord;
             return guessedWord;
         }
 
@@ -80,7 +81,7 @@ namespace HangmanWPF
                     string hiddenWord = HiddenGuessedWord(word);
                     guessedWordTextBlock.Text = hiddenWord;
                     bool gameStatus = CheckGameStatus(hiddenWord);
-                    if (gameStatus) { EndGame(hiddenWord); };
+                    if (gameStatus) { EndGame(); };
                     gallowsTextBlock.Text = gallows[mistakes];
                     inputLetterTextBox.Clear();
                 }
@@ -100,12 +101,21 @@ namespace HangmanWPF
             return false;
         }
 
-        private void EndGame(string guessedWord)
+        private void SetUpGame()
+        {
+            word = words[rng.Next(0, words.Count())].ToLower();
+            words.Remove(word);
+            letters.Clear();
+            mistakes = 0;
+        }
+
+        private void EndGame()
         {
             inputLetterTextBox.IsEnabled = false;
             inputLetterTextBox.Visibility = Visibility.Hidden;
             if (mistakes >= 14 ) { typeLetterTextBlock.FontSize = 24; typeLetterTextBlock.Text = "You loose, guessed word was: " + "'" + word.ToUpper() + "'"; }
             else { typeLetterTextBlock.Text = "You win! "; }
         }
+
     }
 }
