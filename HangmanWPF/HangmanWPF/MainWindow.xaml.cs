@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Tracing;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -81,7 +82,7 @@ namespace HangmanWPF
                     string hiddenWord = HiddenGuessedWord(word);
                     guessedWordTextBlock.Text = hiddenWord;
                     bool gameStatus = CheckGameStatus(hiddenWord);
-                    if (gameStatus) { EndGame(); };
+                    if (gameStatus) { FinishGame(); };
                     gallowsTextBlock.Text = gallows[mistakes];
                     inputLetterTextBox.Clear();
                 }
@@ -103,19 +104,45 @@ namespace HangmanWPF
 
         private void SetUpGame()
         {
+            ResetControlsProperties();
             word = words[rng.Next(0, words.Count())].ToLower();
             words.Remove(word);
             letters.Clear();
             mistakes = 0;
+            gallowsTextBlock.Text = gallows[0];
+            guessedWordTextBlock.Text = HiddenGuessedWord(word);
         }
 
-        private void EndGame()
+        private void FinishGame()
         {
             inputLetterTextBox.IsEnabled = false;
             inputLetterTextBox.Visibility = Visibility.Hidden;
-            if (mistakes >= 14 ) { typeLetterTextBlock.FontSize = 24; typeLetterTextBlock.Text = "You loose, guessed word was: " + "'" + word.ToUpper() + "'"; }
-            else { typeLetterTextBlock.Text = "You win! "; }
+            typeLetterTextBlock.FontSize = 24;
+            if (mistakes >= 14 ) { typeLetterTextBlock.Text = "You loose! Guessed word was: " + "'" + word.ToUpper() + "'"; }
+            else { typeLetterTextBlock.Text = "You win! Guessed word = " + "'" + word.ToUpper() + "'"; }
+            if (words.Count > 0)
+            {
+                guessedWordTextBlock.FontSize = 24;
+                guessedWordTextBlock.Text = "Do you want to play once more ? Click here !";
+                guessedWordTextBlock.Foreground = new SolidColorBrush(Colors.Blue);
+                guessedWordTextBlock.Cursor = Cursors.Hand;
+            }
         }
 
+        private void ResetControlsProperties()
+        {
+            inputLetterTextBox.IsEnabled = true;
+            inputLetterTextBox.Visibility = Visibility.Visible;
+            typeLetterTextBlock.Text = "Type a letter: ";
+            typeLetterTextBlock.FontSize = 36;
+            guessedWordTextBlock.FontSize = 36;
+            guessedWordTextBlock.Foreground = new SolidColorBrush(Colors.Black);
+            guessedWordTextBlock.Cursor = null;
+        }
+
+        private void guessedWordTextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (guessedWordTextBlock.Text == "Do you want to play once more ? Click here !") { SetUpGame(); }
+        }
     }
 }
